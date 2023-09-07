@@ -5,8 +5,8 @@ public enum MenuCommand {
   UNEXEPTED(10, "", ""),
   FINANCIAL(1, "ДОБАВИТЬ ФИНАНСОВЮ ОПЕРАЦИЮ", "FINANCIAL TRANSACTION"),
   OVERVIEWFINANCIAL(2, "ОБЗОР ФИНАНСОВЫХ ОПЕРАЦИЙ", "OVERVIEW TRANSACTIONS"),
-
-  STATISTICS(4, "ПОСМОТРЕТЬ СТАТИСТИКУ", "STATISTICS"),
+  SERVICESTATISTICS(3, "СТАТИСТИКА УСЛУГ", "SERVICE STATISTICS"),
+  MONEYSTATISTICS(4, "СТАТИСТИКА ТРАНЗАКЦИЙ", "MONEY STATISTICS"),
   DELETETRANSACTION(5, "УДАЛИТЬ ТРАНЗАКЦИЮ", "DELETE TRANSACTION"),
   EXIT(0, "ВЫХОД", "EXIT");
 
@@ -23,7 +23,7 @@ public enum MenuCommand {
   }
 
   public static void printMenu() {
-    System.out.println("welcome to ecorancho\n");
+    System.out.println("\nwelcome to ecorancho\n");
     for (MenuCommand command : values()) {
 
       if (command != UNEXEPTED) {
@@ -34,60 +34,94 @@ public enum MenuCommand {
   }
 
   public static MenuCommand commandRead(Scanner scanner) throws IOException {
-    boolean isRun = true;
-    MenuCommand command = null;
-    while (isRun) {
-      printMenu();
-      System.out.print("Выберите пункт меню: \n");
 
-      String input = scanner.nextLine().toUpperCase();
-
-      switch (input) {
-
-        case "10":
-        case "":
-          System.out.println("Не корректный ввод");
-          command = UNEXEPTED;
-          break;
-
-        case "1":
-        case "ДОБАВИТЬ ФИНАНСОВЮ ОПЕРАЦИЮ":
-        case "FINANCIAL TRANSACTION":
-          AdministrativeResource.showMenuFinance(scanner);
-          command = FINANCIAL;
-          break;
-
-        case "2":
-        case "ОБЗОР ФИНАНСОВЫХ ОПЕРАЦИЙ":
-        case "OVERVIEW TRANSACTIONS":
-          AdministrativeResource.readOrders();
-
-          command = OVERVIEWFINANCIAL;
-          break;
-        case "4":
-        case "ПОСМОТРЕТЬ СТАТИСТИКУ":
-        case "STATISTICS":
-          AdministrativeResource.showMenuStatistic(scanner);
-          return STATISTICS;
-
-        case "5":
-        case "УДАЛИТЬ ТРАНЗАКЦИЮ":
-        case "DELETE TRANSACTION":
-          AdministrativeResource.deleteOrder(scanner);
-          command = DELETETRANSACTION;
-          break;
-
-        case "0":
-        case "EXIT":
-        case "ВЫХОД":
-          return EXIT;
-
-        default:
-          command = UNEXEPTED;
-          break;
-      }
-
+    printMenu();
+    System.out.print("Выберите пункт меню: \n");
+    if (!scanner.hasNext()) {
+      throw new RuntimeException("Необходимо ввести команду");
     }
-    return command;
+
+    String input = scanner.next().toUpperCase();
+    scanner.nextLine();
+
+    switch (input) {
+
+      case "1":
+      case "ДОБАВИТЬ ФИНАНСОВЮ ОПЕРАЦИЮ":
+      case "FINANCIAL TRANSACTION":
+        return FINANCIAL;
+
+      case "2":
+      case "ОБЗОР ФИНАНСОВЫХ ОПЕРАЦИЙ":
+      case "OVERVIEW TRANSACTIONS":
+        return OVERVIEWFINANCIAL;
+
+      case "3":
+      case "СТАТИСТИКА УСЛУГ":
+      case "STATISTICNAME":
+        return SERVICESTATISTICS;
+
+      case "4":
+      case "СТАТИСТИКА ТРАНЗАКЦИЙ":
+      case "STATISTICS":
+        return MONEYSTATISTICS;
+
+      case "5":
+      case "УДАЛИТЬ ТРАНЗАКЦИЮ":
+      case "DELETE TRANSACTION":
+        return DELETETRANSACTION;
+
+      case "0":
+      case "EXIT":
+      case "ВЫХОД":
+        return EXIT;
+
+      default:
+        return UNEXEPTED;
+    }
+  }
+
+  public static MenuCommand menuCommand() {
+    Scanner scanner = new Scanner(System.in);
+    boolean isRun = true;
+    try {
+      while (isRun) {
+        MenuCommand command = MenuCommand.commandRead(scanner);
+
+        switch (command) {
+
+          case UNEXEPTED:
+            System.out.println("Не корректная команда");
+            break;
+
+          case FINANCIAL:
+            AdministrativeResource.showMenuFinance(scanner);
+            break;
+          case OVERVIEWFINANCIAL:
+            AdministrativeResource.readOrders();
+            break;
+          case SERVICESTATISTICS:
+            AdministrativeResource.showMenuNameStatistic(scanner);
+            break;
+          case MONEYSTATISTICS:
+            AdministrativeResource.showMenuPriceStatistic(scanner);
+            break;
+          case DELETETRANSACTION:
+            AdministrativeResource.deleteOrder(scanner);
+            break;
+
+          case EXIT:
+            isRun = false;
+            System.out.println("");
+            break;
+
+        }
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    } finally {
+      scanner.close();
+    }
+    return null;
   }
 }

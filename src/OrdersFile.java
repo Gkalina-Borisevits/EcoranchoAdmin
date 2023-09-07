@@ -17,10 +17,12 @@ public class OrdersFile {
   private final String separator;
 
   /**
-   *Конструктор принимающий параметры класса OrdersFile
-   * @param fileName - имя файла, с которым работает программа
+   * Конструктор принимающий параметры класса OrdersFile
+   *
+   * @param fileName  - имя файла, с которым работает программа
    * @param delimiter - сепаратор для разделения строки в файле на отдельные смысловые задачи
-   * @throws IOException - обработка исключений, вызванная при выполнении операций ввода и вывода из файла
+   * @throws IOException - обработка исключений, вызванная при выполнении операций ввода и вывода из
+   *                     файла
    */
   public OrdersFile(String fileName, String delimiter) throws IOException {
     file = new File(fileName);
@@ -38,10 +40,12 @@ public class OrdersFile {
 
 
   /**
-   * Чтение полей класса Order из файла с помощью Scanner,
-   * метод использует Order.parseFromCSVLine - метод для 'парсинга' строк из файла
-   * @return TreeMap, которая собирается из LocalDate и ArrayList<>()
-   * @throws FileNotFoundException - обработка исключений при чтении из файла, если метод не может найти читаемый файл
+   * Чтение полей класса Order из файла с помощью Scanner, метод использует Order.parseFromCSVLine -
+   * метод для разбора строк из файла
+   *
+   * @return TreeMap, созданная на основе ключей LocalDate и значений ArrayList<>()
+   * @throws FileNotFoundException - обработка исключений при чтении из файла, если метод не может
+   *                               найти читаемый файл
    */
   public TreeMap<LocalDate, List<Order>> readOrder() throws FileNotFoundException {
     TreeMap<LocalDate, List<Order>> orders = new TreeMap<>();
@@ -59,11 +63,14 @@ public class OrdersFile {
   }
 
   /**
-   * Метод принимает на вход TreeMap и предназначен для записи с помощью BufferedWriter данных в файл
-   * путем перебора пар ключ - значение, дальше вычленяем значение, заносим его в List благодаря
-   * методу order.getCSVLine, которому на вход подается сепаратор для разделения значений
-   * @param orders Метод принимает на вход TreeMap
-   * @throws IOException - обработка исключений, вызванная при выполнении операций ввода и вывода из файла
+   * Метод принимает на вход TreeMap и предназначен для записи с помощью BufferedWriter данных в
+   * файл. Метод перебирает пары ключ - значение, извлекает значение и заносит его в файл, используя
+   * метод order.getCSVLine. Сепаратор используется для разделения значений в строке CSV.
+   *
+   * @param orders - TreeMap, в котором хранится набор элементов ключ (LocalDate) - значение *
+   *               (List<Order>)
+   * @throws IOException - обработка исключений, вызванная при выполнении операций ввода и вывода из
+   *                     файла
    */
   public void writeOrders(TreeMap<LocalDate, List<Order>> orders) throws IOException {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
@@ -84,11 +91,12 @@ public class OrdersFile {
   }
 
   /**
-   *
-   * @param order - параметр
-   * @param isIncome
-   * @throws IOException
-   */
+   * Метод предназначен для записи данных о заказе в файл с использованием BufferedWriter. Название услуги и ее тип(доход или расход) передаются в виде параметров. Данные о заказе сохраняются в файле в
+   *  * формате CSV с использованием заданного разделителя.
+   * @param order    - название услуги, которую необходимо записать в файл
+   * @param isIncome - флаг, указывающий, является ли услуга доходом (true) или расходом (false).
+   * @throws IOException - общее исключение, возникающее при работе с файлами
+   **/
   public void writeOrder(Order order, boolean isIncome) throws IOException {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
       String csvLine = order.getCSVLine(separator);

@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 public class Order {
 
@@ -87,10 +86,10 @@ public class Order {
   @Override
   public String toString() {
     return "Order{" +
-        "localDate=" + localDate +
-        ", serviceName='" + serviceName + '\'' +
-        ", price=" + price +
-        ", isIncome=" + isIncome +
+        "" + localDate +
+        ", = '" + serviceName + '\'' +
+        ", price= " + price +
+        ", income= " + isIncome +
         '}';
   }
 }

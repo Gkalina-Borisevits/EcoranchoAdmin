@@ -13,13 +13,6 @@ public class OrderTests {
 
   private Order order;
 
-  // @BeforeEach
-  // public void newOrder () {
-  //   order = new Order(LocalDate.of(2024, 12, 12), "Test Order", 90.0, true);
-  //   order1 = new Order(LocalDate.of(0, 0, 0), "Test Order", 90.0, true);
-  //   order2 = new Order(LocalDate.of(2024, 12, 12), "Test Order", 90.0, true);
-  //
-  // }
 
   @Test
   public void serviceNameIsNull() {
